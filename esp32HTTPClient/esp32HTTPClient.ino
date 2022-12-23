@@ -1,3 +1,4 @@
+
 #include "pins_arduino.h"
 #include "secrets.h" // Header file containing credentials, remove this or create own secrets.h file
 #include <Arduino.h>
@@ -6,6 +7,7 @@
 #include <HTTPClient.h>
 #include <Adafruit_NeoPixel.h>
 #include <stdint.h>
+
 
 // Which pin on the Arduino is connected to the NeoPixels?
 #define PIN D7 // On Trinket or Gemma, suggest changing this to 1
@@ -21,6 +23,9 @@ const String host_ip = SERVER_IP;
 const String host_port = SERVER_PORT;
 const String host_FQDN = SERVER_DOMAIN;
 boolean firstCon = true;
+
+int polling_time_out;
+hw_timer_t *polling_timer;
 
 HTTPClient http;
 
@@ -42,12 +47,13 @@ void setup() {
         delay(500);
         Serial.print(".");
     }
-
+    polling_time_out = 2000;
     http.setReuse(true);
+    polling_timer = timerBegin(0,80,true);
 }
 
 void loop() {
-    if(WiFi.status() == WL_CONNECTED){
+    if(WiFi.status() == WL_CONNECTED && timerReadMilis(polling_timer) >= polling_time_out) {
         if (firstCon){
             int col = 0x00a17733;
             setPIXELcolor(col);
@@ -61,7 +67,7 @@ void loop() {
 
         Serial.print("HTTP GET STARTED");
 
-        //http.begin("http://" + host_ip + ":" + host_port + "/unocheck");
+        //http.begin("http://" + host_ip + ":" + host_port + "/unocheck" + "?polling=" + polling_time_out);
         http.begin("https://" + host_FQDN + "/unocheck");
         Serial.println("HTTP GET CALLING");
 
@@ -77,13 +83,12 @@ void loop() {
                 }
             }
         }
-
+        timerRestart(polling_timer);
         http.end();
     }
     else {
-        Serial.print(".");
+        
     }
-    delay(1000);
 }
 
 void setPIXELcolor (int RGB_bits){

@@ -14,6 +14,18 @@ function RGB_bitwise_encoding (colProp){
     return retval;
 }
 
+function RGB_bitwise_decoding (rgbINT){
+    if (rgbINT == undefined) return undefined;
+    let mask = 0x000000ff;
+    let colProp = {};
+    colProp.R = rgbINT & mask;
+    rgbINT >>= 8;
+    colProp.G = rgbINT & mask;
+    rgbINT >>= 8;
+    colProp.B = rgbINT & mask;
+    return colProp;
+}
+
 function handleSpecColor(specProp){
     let color=specProp.spec_color;
     let colProp = {};
@@ -39,4 +51,4 @@ function handleSpecColor(specProp){
     return RGB_bitwise_encoding(colProp);
 }
 
-module.exports = {colorFilter, RGB_bitwise_encoding, handleSpecColor}
+module.exports = {colorFilter, RGB_bitwise_decoding , RGB_bitwise_encoding, handleSpecColor}

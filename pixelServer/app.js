@@ -12,11 +12,13 @@ const app = express();
 const PORT = process.env.PORT || 8000;
 let colorReq = undefined;
 let setcolor = undefined;
+let lastSet = undefined;
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }))
 
-app.use(express.static('public'));
+app.use(express.static(__dirname + '/public'));
+app.set('view engine', 'ejs');
 
 app.listen(PORT, (error) =>{
 	if(!error)
@@ -29,13 +31,14 @@ app.listen(PORT, (error) =>{
 
 app.get('/', (req, res) => {
     res.status(200);
-    res.send("Henlo");
+    res.render('index', genVars());
 });
 
 app.get ('/unocheck', (req, res) =>{
     if (setcolor){
         res.status(200);
         res.send("SETCOLOR=" + setcolor);
+        lastSet = setcolor;
         setcolor = undefined;
     } else {
         res.status(200);
@@ -49,7 +52,7 @@ app.post('/setcolor', (req,res) => {
     setcolor = helpers.RGB_bitwise_encoding(colorReq);
     console.log(colorReq);
     console.log(setcolor);
-    res.redirect('/')
+    res.render('index', genVars());
 });
 
 app.post('/setspec', (req,res) => {
@@ -57,5 +60,9 @@ app.post('/setspec', (req,res) => {
     setcolor = helpers.handleSpecColor(specReq) & (~0xff000000);
     console.log(specReq);
     console.log(setcolor);
-    res.redirect('/');
+    res.render('index',genVars());
 });
+
+function genVars (){
+    return ({currcolor: helpers.RGB_bitwise_decoding(setcolor), lastcol: helpers.RGB_bitwise_decoding(lastSet)});
+}
