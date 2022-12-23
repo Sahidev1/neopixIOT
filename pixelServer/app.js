@@ -16,6 +16,7 @@ let lastSet = undefined;
 let pollingrate = undefined;
 
 let setpolling = undefined;
+let setpreset = undefined;
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }))
@@ -23,7 +24,7 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use(express.static(__dirname + '/public'));
 app.set('view engine', 'ejs');
 
-app.listen(PORT, /*IP,*/ (error) =>{
+app.listen(PORT,/*IP,*/ (error) =>{
 	if(!error)
 		console.log("Server is Successfully Running," +
 				"and App is listening on port ")
@@ -52,6 +53,10 @@ app.get ('/unocheck', (req, res) =>{
         res.send("SETPOLLING=" + setpolling);
         console.log("setpolling sent!");
         setpolling = undefined;
+    } else if (setpreset){
+        res.status(200);
+        res.send("PRESET=" + setpreset);
+        setpreset = undefined;
     }
     else {
         res.status(200);
@@ -82,12 +87,20 @@ app.post('/setpolling', (req,res) => {
     res.render('index',genVars());
 });
 
+app.post('/setpreset', (req,res) =>{
+    if(req.body.preset){
+        setpreset = req.body.preset;
+    }
+    console.log(setpreset);
+    res.render('index', genVars());
+})
+
 function genVars (){
-    var pollprop = {};
-    if(pollingrate) pollprop.poll = pollingrate;
+    var prop = {};
+    if(pollingrate) prop.poll = pollingrate;
     else {
-        pollprop.poll = "unknown";
+        prop.poll = "unknown";
     }
     return ({currcolor: helpers.RGB_bitwise_decoding(setcolor), lastcol: helpers.RGB_bitwise_decoding(lastSet),
-    currpoll: pollprop});
+    currpoll: prop});
 }

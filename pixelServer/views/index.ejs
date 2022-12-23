@@ -28,6 +28,15 @@
                 </form>
             </div>
             <div>
+                <form id="form" class="form" method="POST" action="/setpreset">
+                    <p> Set predefined mode: </p>
+                    <select name="preset" id="presetselect">
+                        <option value="rotate">Rotating color mode</option>
+                    </select>
+                    <p><input type="submit" value="select"/></p>
+                </form>
+            </div>
+            <div>
                 <form id="form" class="form" method="POST" action="/setpolling">
                     <p>set polling rate: <input type="text" id="polling" name="polling"/></p>
                     <P><input type="submit" value="Set"></P>
@@ -36,7 +45,6 @@
             <div>
                 <% var colstr = currcolor?"R: " + currcolor.R + ", G: " + currcolor.G + ", B: " + currcolor.B:"unknown" %>
                 <% var laststr = lastcol?"R: " + lastcol.R + ", G: " + lastcol.G + ", B: " + lastcol.B:"unknown" %>
-              
                 <p>Last Requested Color: <%= colstr %> </p>
                 <p>Last Color set on ESP: <%= laststr %></p>
                 <p>Current polling rate: <%= currpoll.poll %> ms</p>
