@@ -6,13 +6,16 @@ const helpers = require('./helpers');
 const app = express();
 
 
-//const args = process.argv.slice(2);
-//const IP = args[0] || "127.0.0.1";
-//const PORT =  args[1] || "8000"; 
-const PORT = process.env.PORT || 8000;
+const args = process.argv.slice(2);
+const IP = args[0] || "127.0.0.1";
+const PORT =  args[1] || "8000"; 
+//const PORT = process.env.PORT || 8000;
 let colorReq = undefined;
 let setcolor = undefined;
 let lastSet = undefined;
+let pollingrate = undefined;
+
+let setpolling = undefined;
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }))
@@ -20,7 +23,7 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use(express.static(__dirname + '/public'));
 app.set('view engine', 'ejs');
 
-app.listen(PORT, (error) =>{
+app.listen(PORT, IP, (error) =>{
 	if(!error)
 		console.log("Server is Successfully Running," +
 				"and App is listening on port ")
@@ -35,12 +38,22 @@ app.get('/', (req, res) => {
 });
 
 app.get ('/unocheck', (req, res) =>{
+    if (req.query.polling){
+        pollingrate = req.query.polling;
+        console.log(pollingrate);
+    }
     if (setcolor){
         res.status(200);
         res.send("SETCOLOR=" + setcolor);
         lastSet = setcolor;
         setcolor = undefined;
-    } else {
+    } else if(setpolling){
+        res.status(200);
+        res.send("SETPOLLING=" + setpolling);
+        console.log("setpolling sent!");
+        setpolling = undefined;
+    }
+    else {
         res.status(200);
         res.send("NOREQ");
     }
@@ -63,6 +76,13 @@ app.post('/setspec', (req,res) => {
     res.render('index',genVars());
 });
 
+app.post('/setpolling', (req,res) => {
+    setpolling = helpers.pollingRateFilter(req.body.polling);
+    console.log(setpolling);
+    res.render('index',genVars());
+});
+
 function genVars (){
-    return ({currcolor: helpers.RGB_bitwise_decoding(setcolor), lastcol: helpers.RGB_bitwise_decoding(lastSet)});
+    return ({currcolor: helpers.RGB_bitwise_decoding(setcolor), lastcol: helpers.RGB_bitwise_decoding(lastSet),
+    currpolling: pollingrate});
 }

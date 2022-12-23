@@ -16,6 +16,7 @@
             </form>
             <div class="inner">
                 <form id="form" class="form" method="POST" action="/setspec">
+                    <p> Set predefined color: </p>
                     <select name="spec_color" id="coloptions">
                         <option value="RED">RED</option>
                         <option value="GREEN">GREEN</option>
@@ -27,10 +28,17 @@
                 </form>
             </div>
             <div>
+                <form id="form" class="form" method="POST" action="/setpolling">
+                    <p>set polling rate: <input type="text" id="polling" name="polling"/></p>
+                    <P><input type="submit" value="Set"></P>
+                </form>
+            </div>
+            <div>
                 <% var colstr = currcolor?"R: " + currcolor.R + ", G: " + currcolor.G + ", B: " + currcolor.B:"unknown" %>
                 <% var laststr = lastcol?"R: " + lastcol.R + ", G: " + lastcol.G + ", B: " + lastcol.B:"unknown" %>
                 <p>Last Requested Color: <%= colstr %> </p>
                 <p>Last Color set on ESP: <%= laststr %></p>
+                <p>Current polling rate: <%=currpolling %> ms</p>
             </div>
         </div>
     </body>

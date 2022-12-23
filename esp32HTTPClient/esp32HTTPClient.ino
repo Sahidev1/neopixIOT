@@ -67,8 +67,8 @@ void loop() {
 
         Serial.print("HTTP GET STARTED");
 
-        //http.begin("http://" + host_ip + ":" + host_port + "/unocheck" + "?polling=" + polling_time_out);
-        http.begin("https://" + host_FQDN + "/unocheck");
+        http.begin("http://" + host_ip + ":" + host_port + "/unocheck" + "?polling=" + polling_time_out);
+        //http.begin("https://" + host_FQDN + "/unocheck" + "?polling=" + polling_time_out);
         Serial.println("HTTP GET CALLING");
 
         int http_code = http.GET();
@@ -80,6 +80,10 @@ void loop() {
                 if (payload.startsWith("SETCOLOR")){
                     int RGBbits = payload.substring(9).toInt();
                     setPIXELcolor (RGBbits);
+                } else if(payload.startsWith("SETPOLLING")) {
+                    polling_time_out = payload.substring(11).toInt();
+                    Serial.println("SETPOLLING=");
+                    Serial.print(payload.substring(11).toInt());
                 }
             }
         }

@@ -51,4 +51,10 @@ function handleSpecColor(specProp){
     return RGB_bitwise_encoding(colProp);
 }
 
-module.exports = {colorFilter, RGB_bitwise_decoding , RGB_bitwise_encoding, handleSpecColor}
+function pollingRateFilter (pollingrate){
+    if (!pollingrate) return undefined;
+    let defaultpooling = 2000;
+    return pollingrate >= 250 && pollingrate <= 20000?pollingrate:defaultpooling;
+}
+
+module.exports = {colorFilter, RGB_bitwise_decoding , RGB_bitwise_encoding, handleSpecColor, pollingRateFilter}
