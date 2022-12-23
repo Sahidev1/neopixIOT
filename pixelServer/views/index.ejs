@@ -36,9 +36,10 @@
             <div>
                 <% var colstr = currcolor?"R: " + currcolor.R + ", G: " + currcolor.G + ", B: " + currcolor.B:"unknown" %>
                 <% var laststr = lastcol?"R: " + lastcol.R + ", G: " + lastcol.G + ", B: " + lastcol.B:"unknown" %>
+                <% var pollingstr = currpolling?curpolling:"unknown" %>
                 <p>Last Requested Color: <%= colstr %> </p>
                 <p>Last Color set on ESP: <%= laststr %></p>
-                <p>Current polling rate: <%=currpolling %> ms</p>
+                <p>Current polling rate: <%= pollingstr %> ms</p>
             </div>
         </div>
     </body>
