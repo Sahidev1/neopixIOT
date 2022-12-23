@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8"/>
+        <title>Pixel Control</title>
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+        <div class="container">
+            <form id="form" class="form" method="POST" action="/setcolor">
+                <p>Set neoPixel RGB color: </p>
+                <p>R:<input type="text" id="color" name="R"/></p>
+                <p>G:<input type="text" id="color" name="G"/></p>
+                <p>B:<input type="text" id="color" name="B"/></p>
+                <P><input type="submit" value="send"></P>
+            </form>
+            <div class="inner">
+                <form id="form" class="form" method="POST" action="/setspec">
+                    <select name="spec_color" id="coloptions">
+                        <option value="RED">RED</option>
+                        <option value="GREEN">GREEN</option>
+                        <option value="BLUE">BLUE</option>
+                        <option value="YELLOW">YELLOW</option>
+                        <option value="PINK">PINK</option>
+                    </select>
+                    <p><input type="submit" value="select"/></p>
+                </form>
+            </div>
+        </div>
+
+        <script src="script.js"></script>
+    </body>
+
+</html>

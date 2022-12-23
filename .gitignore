@@ -1,0 +1,8 @@
+
+esp32HTTPClient/secrets.h
+
+node_modules/
+
+.vscode 
+
+.deployment
