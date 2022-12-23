@@ -6,10 +6,10 @@ const helpers = require('./helpers');
 const app = express();
 
 
-//const args = process.argv.slice(2);
-//const IP = args[0] || "127.0.0.1";
-//const PORT =  args[1] || "8000"; 
-const PORT = process.env.PORT || 8000;
+const args = process.argv.slice(2);
+const IP = args[0] || "127.0.0.1";
+const PORT =  args[1] || "8000"; 
+//const PORT = process.env.PORT || 8000;
 let colorReq = undefined;
 let setcolor = undefined;
 let lastSet = undefined;
@@ -23,7 +23,7 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use(express.static(__dirname + '/public'));
 app.set('view engine', 'ejs');
 
-app.listen(PORT, (error) =>{
+app.listen(PORT, IP, (error) =>{
 	if(!error)
 		console.log("Server is Successfully Running," +
 				"and App is listening on port ")
@@ -83,6 +83,11 @@ app.post('/setpolling', (req,res) => {
 });
 
 function genVars (){
+    var pollprop = {};
+    if(pollingrate) pollprop.poll = pollingrate;
+    else {
+        pollprop.poll = "unknown";
+    }
     return ({currcolor: helpers.RGB_bitwise_decoding(setcolor), lastcol: helpers.RGB_bitwise_decoding(lastSet),
-    currpolling: pollingrate});
+    currpoll: pollprop});
 }
